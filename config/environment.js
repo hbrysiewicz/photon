@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
-    modulePrefix: 'photo-feed',
+    modulePrefix: 'photon',
     environment: environment,
     baseURL: '/',
     locationType: 'auto',

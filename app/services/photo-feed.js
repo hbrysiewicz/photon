@@ -10,30 +10,43 @@ export default Ember.Service.extend({
     this._super(...arguments);
     this.socket = new Phoenix.Socket('/socket');
   },
+
   connect() {
     this.socket.connect();
   },
+
   createChannel(topic) {
     this.channel = this.socket.channel(topic);
   },
+
   setupChannel() {
-    this.channel.on('feed', this._load.bind(this));
-    this.channel.on('new-photo', this._push.bind(this));
+    this.channel.on('feed', this._feed.bind(this));
+    this.channel.on('new-photo', this._newPhoto.bind(this));
   },
+
   joinChannel() {
     this.channel.join();
   },
-  _load(obj) {
-    let urls = JSON.parse(obj.body);
+
+  _feed(serializedPayload) {
+    let payload = JSON.parse(serializedPayload.body);
     let owner = getOwner(this);
     let store = owner.lookup('service:store');
 
-    urls.forEach((url) => store.createRecord('photo', { id: url }));
+    payload.forEach((item) => store.createRecord('photo', {
+      id: item.url,
+      lastModified: item.last_modified
+    }));
   },
-  _push(obj) {
+
+  _newPhoto(serializedPayload) {
+    let payload = JSON.parse(serializedPayload.body);
     let owner = getOwner(this);
     let store = owner.lookup('service:store');
 
-    store.createRecord('photo', { id: obj.body });
+    store.createRecord('photo', {
+      id: payload.url,
+      lastModified: payload.last_modified
+    });
   }
 });

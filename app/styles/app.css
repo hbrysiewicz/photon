@@ -1,3 +1,28 @@
-ul {
+.pure-center {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.photo-item {
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.photo-list {
   list-style-type: none;
+}
+
+.photo-list li {
+  text-align: center;
+}
+
+.drop-zone {
+  min-height: 500px;
+  min-width: 500px;
+  border: 2px dashed black;
+}
+
+.drop-zone.dragging {
+  background-color: #f8efec;
 }
